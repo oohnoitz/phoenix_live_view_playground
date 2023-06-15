@@ -36,7 +36,10 @@ defmodule PlaygroundWeb.StreamsLive do
         <h2 class="text-lg">Live View (Nested)</h2>
         <ul id="stream-3-nested" class="list-disc list-inside" phx-update="stream">
           <%= for {dom_id, _item} <- @streams.items_3 do %>
-            <%= live_render(@socket, PlaygroundWeb.StreamsNestedLive, id: dom_id) %>
+            <%= live_render(@socket, PlaygroundWeb.StreamsNestedLive,
+              id: dom_id,
+              session: %{"nested_id" => dom_id}
+            ) %>
           <% end %>
         </ul>
       </div>

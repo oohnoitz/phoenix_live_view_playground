@@ -4,7 +4,7 @@ defmodule PlaygroundWeb.StreamsNestedLive do
   def render(assigns) do
     ~H"""
     <div>
-      <ul id="stream-3" class="list-disc list-inside" phx-update="stream">
+      <ul id={"nested-#{@id}"} class="list-disc list-inside" phx-update="stream">
         <li :for={{dom_id, item} <- @streams.nested_items} id={dom_id}>
           <%= item.id %>
         </li>
@@ -18,11 +18,14 @@ defmodule PlaygroundWeb.StreamsNestedLive do
     """
   end
 
-  def mount(_params, _session, socket) do
+  def mount(_params, session, socket) do
     socket =
       socket
+      |> assign(:id, Map.get(session, "nested_id"))
       |> assign(:increment, 1)
-      |> stream_configure(:nested_items, dom_id: &"nested-item-1-#{&1.id}")
+      |> stream_configure(:nested_items,
+        dom_id: &"nested-item-#{Map.get(session, "nested_id")}-#{&1.id}"
+      )
       |> stream(:nested_items, items())
 
     {:ok, socket}
